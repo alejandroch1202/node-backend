@@ -1,0 +1,10 @@
+version: "3.3"
+
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=containers-us-west-205.railway.app 
+      - PMA_PORT=6440
+    ports:
+      - 8080:80
