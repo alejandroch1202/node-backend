@@ -11,7 +11,7 @@ router.post("/login", async (req, res, next) => {
     const result = await controller.login(username, password);
     response.success(req, res, result, 200);
   } catch (error) {
-    next();
+    next(error);
   }
 });
 
