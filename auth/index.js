@@ -39,7 +39,12 @@ const checkUser = (req, user) => {
   }
 };
 
+const checkToken = (req) => {
+  return decode(req);
+};
+
 module.exports = {
   sign,
   checkUser,
+  checkToken,
 };

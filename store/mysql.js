@@ -72,11 +72,39 @@ const remove = async (table, id) => {
   return id;
 };
 
-const query = async (table, q) => {
+const query = async (table, q, join) => {
   try {
-    const query = `SELECT * FROM ${table} WHERE ?`;
+    let joinQuery = "";
+
+    if (join) {
+      const key = Object.keys(join)[0];
+      const value = join[key];
+      joinQuery = `JOIN ${key} ON ${table}.${value} = ${key}.id`
+    }
+
+    const query = `SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`;
     const data = await connection.query(query, q);
-    return data[0][0] || null;
+    return data[0] || null;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const follow = async (table, data) => {
+  try {
+    const query = `INSERT INTO ${table} SET ?`;
+    const result = await connection.query(query, data);
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const following = async (table, user) => {
+  try {
+    const query = `SELECT * FROM ${table} WHERE user_from="${user}"`;
+    const result = await connection.query(query);
+    return result[0];
   } catch (error) {
     throw new Error(error);
   }
@@ -88,4 +116,6 @@ module.exports = {
   add,
   update,
   query,
+  follow,
+  following,
 };

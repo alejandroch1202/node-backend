@@ -8,6 +8,12 @@ const checkRole = (action) => {
         auth.checkUser(req, user);
         next();
         break;
+
+      case "follow":
+        auth.checkToken(req);
+        next();
+        break;
+
       default:
         next();
     }

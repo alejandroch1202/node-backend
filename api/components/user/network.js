@@ -55,4 +55,25 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
+router.post("/follow/:id", security("follow"), async (req, res, next) => {
+  try {
+    const from = req.user.id;
+    const to = req.params.id;
+    const result = await controller.follow(from, to);    
+    response.success(req, res, result, 200);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/follow", async (req, res, next) => {
+  try {
+    const user = req.params.id;
+    const result = await controller.following(user);    
+    response.success(req, res, result, 200);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
