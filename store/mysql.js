@@ -67,9 +67,13 @@ const update = async (table, id, data) => {
 };
 
 const remove = async (table, id) => {
-  const index = db[table].findIndex((data) => data.id === id);
-  db[table].splice(index, 1);
-  return id;
+  try {
+    const query = `DELETE FROM ${table} WHERE id="${id}"`;
+    const result = await connection.query(query);
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const query = async (table, q, join) => {
@@ -115,6 +119,7 @@ module.exports = {
   get,
   add,
   update,
+  remove,
   query,
   follow,
   following,
