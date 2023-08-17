@@ -1,8 +1,8 @@
 const remote = require('./remote')
 const config = require('./../config')
 
-const host = config.mysqlService.host
-const port = config.mysqlService.port
+const host = config.cacheService.host
+const port = config.cacheService.port
 
 const instance = remote(host, port)
 

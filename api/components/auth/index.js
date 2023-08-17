@@ -1,5 +1,7 @@
 // const store = require("./../../../store/dummy");
-const store = require("./../../../store/mysql");
-const controller = require("./controller");
+// const store = require("./../../../store/postgres");
+// const store = require("./../../../store/mysql");
+const store = require('./../../../store/remote.mysql')
+const controller = require('./controller')
 
-module.exports = controller(store);
+module.exports = controller(store)

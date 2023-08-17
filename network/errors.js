@@ -1,12 +1,12 @@
-const response = require("./response");
+const response = require('./response')
 
 const errors = (error, req, res, next) => {
-  console.error("[error]", error);
+  console.error('[error]', error)
 
-  const message = error.message || "Internal server error";
-  const status = error.statusCode || 500;
+  const message = error.message || 'Internal server error'
+  const status = error.statusCode || 500
 
-  response.error(req, res, message, status);
-};
+  response.error(req, res, message, status)
+}
 
-module.exports = errors;
+module.exports = errors

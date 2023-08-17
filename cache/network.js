@@ -1,6 +1,6 @@
 const express = require('express')
 const response = require('./../network/response')
-const store = require('./../store/mysql')
+const store = require('./../store/redis')
 
 const router = express.Router()
 
@@ -42,17 +42,6 @@ router.patch('/:table/:id', async (req, res, next) => {
     const id = req.params.id
     const data = req.body
     const result = await store.update(table, id, data)
-    response.success(req, res, result, 200)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.delete('/:table/:id', async (req, res, next) => {
-  try {
-    const table = req.params.table
-    const id = req.params.id
-    const result = await store.remove(table, id)
     response.success(req, res, result, 200)
   } catch (error) {
     next(error)

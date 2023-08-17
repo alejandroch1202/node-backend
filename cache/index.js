@@ -8,6 +8,6 @@ app.use(express.json())
 app.use('/', user)
 
 app.listen(
-  config.mysqlService.port,
-  console.log(`[mysql service] Running on http://localhost:${config.mysqlService.port}`)
+  config.cacheService.port,
+  console.log(`[redis service] Running on http://localhost:${config.cacheService.port}`)
 )

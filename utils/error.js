@@ -1,11 +1,11 @@
 const error = (message, status) => {
-  let err = new Error(message);
+  const err = new Error(message)
 
   if (status) {
-    err.statusCode = status;
+    err.statusCode = status
   }
 
-  return err;
-};
+  return err
+}
 
-module.exports = error;
+module.exports = error

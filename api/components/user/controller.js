@@ -1,70 +1,82 @@
-const auth = require('../auth');
-const TABLE = "user";
+const auth = require('../auth')
+const TABLE = 'user'
 
-module.exports = (injectedStore) => {
-  let store = injectedStore;
+module.exports = (injectedStore, injectedCache) => {
+  let store = injectedStore
+  let cache = injectedCache
   if (!store) {
-    store = require("./../../../store/mysql");
+    store = require('./../../../store/dummy')
+  }
+  if (!cache) {
+    cache = require('./../../../store/dummy')
   }
 
   const list = async () => {
-    return store.list(TABLE);
-  };
+    let users = await cache.list(TABLE)
+    if (!users) {
+      console.log('Was not in cache, fetching DB instead')
+      users = await store.list(TABLE)
+      await cache.add(TABLE, users)
+    } else {
+      console.log('Found in cache')
+    }
+    return users
+  }
 
   const get = async (id) => {
-    return store.get(TABLE, id);
-  };
+    return store.get(TABLE, id)
+  }
 
   const add = async (data) => {
     const userData = await store.add(TABLE, {
       name: data.name,
-      username: data.username,
-    });
+      username: data.username
+    })
 
     if (data.username || data.password) {
       await auth.add({
         id: userData.id,
         username: data.username,
-        password: data.password,
-      });
+        password: data.password
+      })
     }
 
-    return userData;
-  };
+    return userData
+  }
 
   const update = async (id, data) => {
-    let newData = {};
+    const newData = {}
     if (data.username || data.password) {
       if (data.username) {
-        newData.username = data.username;
+        newData.username = data.username
       }
       if (data.password) {
-        newData.password = data.password;
+        newData.password = data.password
       }
-      await auth.update(id, newData);
+      await auth.update(id, newData)
     }
 
-    return store.update(TABLE, id, data);
-  };
+    return store.update(TABLE, id, data)
+  }
 
   const remove = async (id) => {
-    await auth.remove(id);
-    return store.remove(TABLE, id);
-  };
+    await auth.remove(id)
+    return store.remove(TABLE, id)
+  }
 
   const follow = async (from, to) => {
-    return await store.follow(TABLE + "_follow", {
+    return await store.follow(TABLE + '_follow', {
       user_from: from,
-      user_to: to,
-    });
-  };
+      user_to: to
+    })
+  }
 
   const following = async (user) => {
-    const join = {};
-    join[TABLE] = "user_to";
+    const join = {}
+    join[TABLE] = 'user_to'
     const query = { user_from: user }
-    return await store.query(TABLE + "_follow", query, join);
-  };
+    return await store.query(TABLE + '_follow', query, join)
+  }
 
   return {
     list,
@@ -73,6 +85,6 @@ module.exports = (injectedStore) => {
     update,
     remove,
     follow,
-    following,
-  };
-};
+    following
+  }
+}
